@@ -1,0 +1,41 @@
+pipeline {
+    
+    agent {
+        docker {
+            image 'python:3.9.21-alpine3.21'
+        }
+    }
+    
+    stages {
+        
+        stage('Checkout'){
+           steps {
+                git branch: 'main', 
+                url: 'https://github.com/cloudhein/Jenkins-Playground.git'
+           }
+        }
+
+        stage('Install Depedencies'){
+            steps{
+                script{
+                    sh '''
+                    python -m pip install --upgrade pip
+                    pip install --no-cache-dir flask
+                    '''
+                }
+            }
+        }
+
+        stage('Run Tests'){
+           steps{
+                script{
+                    sh '''
+                    cd python-app
+                    python app.py &
+                    '''
+                }
+            }
+        }
+        
+    }
+}

@@ -19,7 +19,9 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    pip install --no-cache-dir flask
+                    python -m venv venv
+                    venv/bin/pip install --upgrade pip
+                    venv/bin/pip install --upgrade pip
                     '''
                 }
             }
@@ -30,7 +32,7 @@ pipeline {
                 script{
                     sh '''
                     cd python-app
-                    python app.py &
+                    ../venv/bin/python app.py &
                     '''
                 }
             }

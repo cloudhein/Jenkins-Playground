@@ -31,7 +31,7 @@ pipeline {
            steps{
                 script{
                     sh '''
-                    cd python-addition
+                    cd python-addition-app
                     ../venv/bin/python -m pytest addition.py
                     '''
                 }

@@ -1,0 +1,49 @@
+pipeline {
+    
+    agent {
+        label 'agent-01'  // Run directly on the agent-01 worker node
+    }
+    
+    stages {
+        
+        stage('Checkout'){
+           steps {
+                git branch: 'main', 
+                url: 'https://github.com/cloudhein/Jenkins-Playground.git'
+           }
+        }
+
+        stage('Install Depedencies'){
+            steps{
+                script{
+                    sh '''             
+                    pip install --upgrade pip
+                    pip install flask
+                    '''
+                }
+            }
+        }
+
+        stage('Configure Inbound rules firewall'){
+           steps{
+                script{
+                    sh '''
+                    sudo firewall-cmd --add-port=5000/tcp --permanent
+                    sudo firewall-cmd --reload
+                    '''
+                }
+            }
+        }
+
+        stage('Run Tests'){
+           steps{
+                script{
+                    sh '''
+                    cd python-app-jenkins-agent
+                    python app.py &
+                    '''
+                }
+            }
+        }      
+    }
+}
